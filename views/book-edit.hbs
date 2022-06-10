@@ -1,0 +1,30 @@
+<h1>Edit book "{{resp.title}}"</h1>
+<div class="container">
+    <form action="/" METHOD="POST" name="">
+        <div class="row">
+
+            <div class="three columns">
+                <label for="title">Title</label>
+                <input id="title" name="title" required type="text">
+            </div>
+            <div class="three columns">
+                <label for="author">Author</label>
+                <input id="author" type="text" name="author">
+            </div>
+            <div class="three columns">
+                <label for="pages">Number of pages</label>
+                <input id="pages" min="0" type="number" value="0" name="pages">
+            </div>
+            <div class="three columns">
+                <label for="status">Status </label>
+                <select id="status" name="status">
+                    <option value=''>- choose -</option>
+                    <option value="read">Read</option>
+                    <option value="not read">Not Read</option>
+                </select>
+
+            </div>
+        </div>
+        <input class="button-primary" id="addBook" type="submit" value="save">
+    </form>
+</div>
