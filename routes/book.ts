@@ -9,20 +9,19 @@ BookRouter
 
     .get('/', async (req, res) => {
 
-        const resp = await BookRecord.getAll();
-        res.render('home', {resp})
+        const found = await BookRecord.getAll();
+        res.render('home', {found})
     })
 
     .get('/:id', async (req, res) => {
 
         const {id} = req.params;
 
-        const resp = await BookRecord.getOne(id);
-        if (!resp) {
+        const found = await BookRecord.getOne(id);
+        if (!found) {
             throw new ValidationError('There is no book with this ID')
         }
-
-        res.render('book-edit', {resp})
+        res.render('book-edit', {found})
     })
 
     .post('/', async (req, res) => {
@@ -56,7 +55,6 @@ BookRouter
             throw new ValidationError('Wrong id!')
         }
         await found.update(req.body);
-
 
         res.redirect('/')
     })

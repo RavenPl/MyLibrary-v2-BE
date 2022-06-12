@@ -43,7 +43,6 @@ export class BookRecord implements BookEntity {
     static async getOne(id: string): Promise<BookRecord> {
 
         const [book] = await pool.execute('SELECT * FROM `books` WHERE `id` = :id', {id}) as BookRecordResults;
-
         return book.map(obj => new BookRecord(obj))[0]
     }
 
