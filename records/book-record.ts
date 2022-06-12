@@ -1,19 +1,8 @@
 import {pool} from "../utils/db";
-import {FieldPacket} from "mysql2";
 import {v4 as uuid} from 'uuid'
 import {ValidationError} from "../utils/errors";
+import {BookEntity, BookRecordResults, CreateBookEntity} from "../types";
 
-type BookRecordResults = [BookRecord[], FieldPacket[]];
-
-export type CreateBookEntity = Omit<BookEntity, 'id'>;
-
-interface BookEntity {
-    id?: string;
-    title: string;
-    author: string;
-    pages: number;
-    status: string;
-}
 
 export class BookRecord implements BookEntity {
 
@@ -64,9 +53,8 @@ export class BookRecord implements BookEntity {
         }
 
         const [allBooks] = await pool.execute('SELECT * FROM `books` ORDER BY `title` ASC') as BookRecordResults;
-        console.log(allBooks, '1');
         const [found] = allBooks.filter(obj => obj.title.toUpperCase() === this.title.toUpperCase());
-        console.log(found, '2');
+
         if (found) {
             throw new ValidationError('You already have this title!')
         }
@@ -85,5 +73,17 @@ export class BookRecord implements BookEntity {
         await pool.execute('DELETE FROM `books` WHERE `id` = :id', {
             id: this.id
         })
+    }
+
+    async update(obj: CreateBookEntity): Promise<void> {
+
+        await pool.execute("UPDATE `books` SET `title` = :title, `author` = :author, `status` = :status, `pages` = :pages WHERE `id` = :id", {
+            title: obj.title,
+            author: obj.author,
+            pages: obj.pages,
+            status: obj.status,
+            id: this.id,
+        })
+
     }
 }

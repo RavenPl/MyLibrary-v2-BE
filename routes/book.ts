@@ -1,6 +1,7 @@
 import {Router} from "express";
-import {BookRecord, CreateBookEntity} from "../records/book-record";
+import {BookRecord} from "../records/book-record";
 import {ValidationError} from "../utils/errors";
+import {CreateBookEntity} from "../types";
 
 export const BookRouter = Router();
 
@@ -43,6 +44,19 @@ BookRouter
         }
 
         await found.delete();
+
+        res.redirect('/')
+    })
+    .put('/:id', async (req, res) => {
+
+        const {id} = req.params;
+        const found = await BookRecord.getOne(id);
+
+        if (!found) {
+            throw new ValidationError('Wrong id!')
+        }
+        await found.update(req.body);
+
 
         res.redirect('/')
     })
