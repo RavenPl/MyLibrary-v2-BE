@@ -24,3 +24,11 @@ h1 {
 
     text-align: center;
 }
+
+form {
+    margin: 2rem 0;
+}
+
+button {
+    margin-bottom: 0;
+}

@@ -47,17 +47,20 @@
                 <td>{{this.author}}</td>
                 <td>{{this.pages}}</td>
                 <td style="text-align: center" class={{isRead this.status}}>{{isRead this.status}}</td>
-                <form action="{{this.id}}">
-                    <td style="text-align: center">
-                        <button>edit</button>
-                    </td>
-                </form>
 
-                <form action="{{this.id}}/?_method=DELETE" method="POST">
-                    <td style="text-align: center">
+                <td style="text-align: center">
+                    <form action="{{this.id}}">
+                        <button>edit</button>
+                    </form>
+                </td>
+
+
+                <td style="text-align: center">
+                    <form action="{{this.id}}/?_method=DELETE" method="POST">
                         <button class="delete">delete</button>
-                    </td>
-                </form>
+                    </form>
+
+                </td>
 
             </tr>
         {{/each}}
