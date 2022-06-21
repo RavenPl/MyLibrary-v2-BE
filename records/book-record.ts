@@ -21,7 +21,7 @@ export class BookRecord implements BookEntity {
         this.status = obj.status;
 
         if (obj.title === "" || obj.title.length < 2 || obj.title.length > 100) {
-            throw new ValidationError('Book title should have at least 2 characters but no more than 100!');
+            throw new ValidationError('Book title should be a string type and have at least 2 characters, but no more than 100!');
         }
 
         if (obj.author === "" || obj.author.length < 2 || obj.author.length > 100) {
