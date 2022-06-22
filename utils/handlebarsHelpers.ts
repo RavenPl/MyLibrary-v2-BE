@@ -6,10 +6,7 @@ export const handlebarsHelpers = {
 
     selected: (info: string, value: string) => {
 
-        if (info === "") {
-            return `selected`
-        } else {
-            return info === value && `selected`
-        }
+        return (info === "" || info === value) && `selected`
+
     }
 }
