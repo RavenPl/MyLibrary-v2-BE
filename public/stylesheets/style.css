@@ -3,7 +3,7 @@
     padding: 0;
 }
 
-h1 {
+h1, h2 {
     width: 75%;
     margin: 100px auto;
     text-align: center;
@@ -30,7 +30,7 @@ form {
     margin: 2rem 0;
 }
 
-button {
+button, .button {
     margin-bottom: 0;
 }
 
@@ -45,6 +45,6 @@ button {
     font-size: 30px;
 }
 
-.error h2 {
-    margin-top: 50px;
-}
+/*.error h2 {*/
+/*    margin-top: 50px;*/
+/*}*/

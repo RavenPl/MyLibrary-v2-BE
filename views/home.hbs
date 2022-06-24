@@ -1,5 +1,5 @@
 <div class="container">
-    <form action="/book" METHOD="POST" name="">
+    <form action="/books" METHOD="POST" name="">
         <div class="row">
 
             <div class="three columns">
@@ -36,7 +36,6 @@
             <th style="text-align: center">Status</th>
             <th style="text-align: center">Edit</th>
             <th style="text-align: center">Action</th>
-
         </tr>
         </thead>
         <tbody id="table">
@@ -47,18 +46,13 @@
                 <td>{{this.author}}</td>
                 <td>{{this.pages}}</td>
                 <td style="text-align: center" class={{isRead this.status}}>{{isRead this.status}}</td>
-
                 <td style="text-align: center">
-                    <form action="/book/{{this.id}}">
-                        <button>edit</button>
-                    </form>
+                    <a class="button" href="/books/edit/{{this.id}}">edit</a>
                 </td>
-
                 <td style="text-align: center">
-                    <form action="/book/{{this.id}}/?_method=DELETE" method="POST">
+                    <form action="/books/{{this.id}}/?_method=DELETE" method="POST">
                         <button class="delete">delete</button>
                     </form>
-
                 </td>
 
             </tr>

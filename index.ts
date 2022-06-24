@@ -20,7 +20,7 @@ app.engine('.hbs', engine({
     helpers: handlebarsHelpers,
 }));
 app.set('view engine', '.hbs');
-app.use('/book', BookRouter);
+app.use('/books', BookRouter);
 
 app.use(handleError);
 
