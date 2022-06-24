@@ -1,7 +1,6 @@
 import {Router} from "express";
 import {BookRecord} from "../records/book-record";
 import {NoFoundError, ValidationError} from "../utils/errors";
-import {CreateBookEntity} from "../types";
 
 export const BookRouter = Router();
 
@@ -14,44 +13,47 @@ BookRouter
         })
     })
 
-    .get('/:id', async (req, res) => {
+    .get('/edit/:id', async (req, res) => {
 
-
-        const found = await BookRecord.getOne(req.params.id);
-        if (!found) {
+        const book = await BookRecord.getOne(req.params.id);
+        if (!book) {
             throw new NoFoundError()
         }
 
-        res.render('book-edit', {found})
+        res
+            .render('book/book-edit', {book})
     })
 
     .post('/', async (req, res) => {
 
-        const newBook = new BookRecord(req.body as CreateBookEntity);
+        const newBook = new BookRecord(req.body);
         await newBook.insert();
 
         res
-            .redirect('/book')
+            .status(201)
+            .render('book/book-add', {newBook})
     })
 
     .delete('/:id', async (req, res) => {
 
-        const found = await BookRecord.getOne(req.params.id);
-        if (!found) {
-            throw new ValidationError('There is no such book with that ID!')
-        }
-        await found.delete();
+        const book = await BookRecord.getOne(req.params.id);
+        await book.delete();
 
-        res.redirect('/book')
+        res
+            .render('book/book-delete', {book})
     })
 
-    .put('/edit/:id', async (req, res) => {
+    .put('/:id', async (req, res) => {
 
-        const found = await BookRecord.getOne(req.params.id);
-        if (!found) {
-            throw new ValidationError('Wrong id!')
+        const editedBook = await BookRecord.getOne(req.params.id);
+        const result = await editedBook.checkUpdatedBookTitle(editedBook.id, req.body.title);
+
+        if (result) {
+            throw new ValidationError('You already have this title in your library!')
         }
-        await found.update(req.body);
 
-        res.redirect('/book')
+        await editedBook.update(req.body);
+
+        res
+            .redirect('/books')
     })

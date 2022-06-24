@@ -1,18 +1,18 @@
 import {pool} from "../utils/db";
 import {v4 as uuid} from 'uuid'
 import {ValidationError} from "../utils/errors";
-import {BookEntity, BookRecordResults, CreateBookEntity} from "../types";
+import {BookEntity, BookRecordResults} from "../types";
 
 
 export class BookRecord implements BookEntity {
 
-    id?: string;
+    id: string;
     title: string;
     author: string;
     pages: number;
     status: string;
 
-    constructor(obj: BookEntity) {
+    constructor(obj: BookRecord) {
 
         this.id = obj.id;
         this.title = obj.title;
@@ -74,7 +74,7 @@ export class BookRecord implements BookEntity {
         })
     }
 
-    async update(obj: CreateBookEntity): Promise<void> {
+    async update(obj: BookRecord): Promise<void> {
 
         await pool.execute("UPDATE `books` SET `title` = :title, `author` = :author, `status` = :status, `pages` = :pages WHERE `id` = :id", {
             title: obj.title,
@@ -83,6 +83,14 @@ export class BookRecord implements BookEntity {
             status: obj.status,
             id: this.id,
         })
+    }
+
+    async checkUpdatedBookTitle(id: string, titleUpdate: string): Promise<BookRecord | undefined> {
+
+        const listOfBooks = await BookRecord.getAll();
+        const filterBooks = listOfBooks ? listOfBooks.filter(book => book.id !== id) : [];
+
+        return filterBooks.find(obj => obj.title.toLowerCase() === titleUpdate.toLowerCase());
 
     }
 }
