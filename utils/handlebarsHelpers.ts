@@ -1,7 +1,7 @@
 export const handlebarsHelpers = {
 
     isRead: (status: string) => {
-        return status === 'read' ? 'read' : 'notRead'
+        return status === 'read' ? 'read' : 'not read'
     },
 
     selected: (info: string, value: string) => {

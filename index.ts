@@ -1,11 +1,12 @@
-import 'express-async-errors';
 import express, {json, urlencoded} from "express";
-import {engine} from "express-handlebars";
+import 'express-async-errors';
 import './utils/db'
-import {BookRouter} from "./routes/book";
-import {handlebarsHelpers} from "./utils/handlebarsHelpers";
-import {handleError} from "./utils/errors";
+import {engine} from "express-handlebars";
 import methodOverride from "method-override";
+import {handleError} from "./utils/errors";
+import {handlebarsHelpers} from "./utils/handlebarsHelpers";
+import {bookRouter} from "./routes/book";
+import {homeRouter} from "./routes/home";
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.engine('.hbs', engine({
     helpers: handlebarsHelpers,
 }));
 app.set('view engine', '.hbs');
-app.use('/books', BookRouter);
+app.use('/', homeRouter)
+app.use('/books', bookRouter);
 
 app.use(handleError);
 

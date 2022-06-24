@@ -1,10 +1,11 @@
 import {Router} from "express";
 import {BookRecord} from "../records/book-record";
 import {NoFoundError, ValidationError} from "../utils/errors";
+import {UpdatedBookRecord} from "../types";
 
-export const BookRouter = Router();
+export const bookRouter = Router();
 
-BookRouter
+bookRouter
 
     .get('/', async (req, res) => {
 
@@ -26,7 +27,13 @@ BookRouter
 
     .post('/', async (req, res) => {
 
-        const newBook = new BookRecord(req.body);
+        const {title, author} = req.body as BookRecord;
+        const newBook = new BookRecord({
+            ...req.body,
+            title: title.trim(),
+            author: author.trim(),
+        });
+
         await newBook.insert();
 
         res
@@ -46,13 +53,20 @@ BookRouter
     .put('/:id', async (req, res) => {
 
         const editedBook = await BookRecord.getOne(req.params.id);
-        const result = await editedBook.checkUpdatedBookTitle(editedBook.id, req.body.title);
+
+        const {title} = req.body as UpdatedBookRecord;
+        const updatedBook = {
+            ...req.body,
+            title: title.trim()
+        };
+
+        const result = await editedBook.checkUpdatedBookTitle(editedBook.id, updatedBook.title);
 
         if (result) {
             throw new ValidationError('You already have this title in your library!')
         }
 
-        await editedBook.update(req.body);
+        await editedBook.update(updatedBook);
 
         res
             .redirect('/books')
