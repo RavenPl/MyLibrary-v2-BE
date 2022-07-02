@@ -22,8 +22,26 @@ bookRouter
         }
 
         res
-            .render('book/book-edit', {book})
+            .render('book/book-form-edit', {book})
     })
+
+    .get('/delete/all', async (req, res) => {
+
+        res
+            .render('book/book-delete-all')
+    })
+
+    .get('/delete/:id', async (req, res) => {
+
+        const book = await BookRecord.getOne(req.params.id);
+        if (!book) {
+            throw new NoFoundError()
+        }
+
+        res
+            .render('book/book-form-delete', {book})
+    })
+
 
     .post('/', async (req, res) => {
 
@@ -38,7 +56,7 @@ bookRouter
 
         res
             .status(201)
-            .render('book/book-add', {newBook})
+            .render('book/book-added', {newBook})
     })
 
     .delete('/:id', async (req, res) => {
@@ -47,18 +65,27 @@ bookRouter
         await book.delete();
 
         res
-            .render('book/book-delete', {book})
+            .redirect('/books')
     })
 
-    .put('/:id', async (req, res) => {
+    .delete('/delete/all', async (req, res) => {
+
+        await BookRecord.clearList();
+
+        res
+            .redirect('/books')
+    })
+
+    .put('/edit/:id', async (req, res) => {
 
         const editedBook = await BookRecord.getOne(req.params.id);
 
-        const {title} = req.body as UpdatedBookRecord;
-        const updatedBook = {
+        const {title, author} = req.body as UpdatedBookRecord;
+        const updatedBook = new BookRecord({
             ...req.body,
-            title: title.trim()
-        };
+            title: title.trim(),
+            author: author.trim(),
+        });
 
         const result = await editedBook.checkUpdatedBookTitle(editedBook.id, updatedBook.title);
 

@@ -2,6 +2,7 @@ import {pool} from "../utils/db";
 import {v4 as uuid} from 'uuid'
 import {ValidationError} from "../utils/errors";
 import {BookEntity, BookRecordResults} from "../types";
+import {ResultSetHeader} from "mysql2";
 
 
 export class BookRecord implements BookEntity {
@@ -43,7 +44,18 @@ export class BookRecord implements BookEntity {
     static async getOne(id: string): Promise<BookRecord> {
 
         const [book] = await pool.execute('SELECT * FROM `books` WHERE `id` = :id', {id}) as BookRecordResults;
+
         return book.map(obj => new BookRecord(obj))[0]
+    }
+
+    static async clearList(): Promise<void> {
+
+        const [result] = await pool.execute("DELETE FROM `books`") as ResultSetHeader[]
+
+        if (!result.affectedRows) {
+            throw new ValidationError('Your book list is empty!')
+        }
+
     }
 
     async insert(): Promise<void> {
