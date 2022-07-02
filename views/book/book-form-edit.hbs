@@ -1,6 +1,6 @@
 <h1>Edit book "{{book.title}}"</h1>
 <div class="container">
-    <form action="/books/{{book.id}}/?_method=PUT" method="POST">
+    <form action="/books/edit/{{book.id}}/?_method=PUT" method="POST">
         <div class="row">
 
             <div class="three columns">
@@ -22,10 +22,11 @@
                     <option {{selected book.status "read"}} value="read">Read</option>
                     <option {{selected book.status "not read"}} value="not read">Not read</option>
                 </select>
-
             </div>
+
         </div>
         <input class="button-primary" id="addBook" type="submit" value="save">
+
     </form>
-    {{>go-back }}
+    {{>go-home }}
 </div>
